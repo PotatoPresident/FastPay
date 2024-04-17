@@ -1,10 +1,6 @@
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
@@ -23,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -39,30 +36,32 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
 actual class QRScannerScreen actual constructor(
-    modifier: Modifier,
-    onQrCodeScanned: (String) -> Unit
+    val modifier: Modifier,
+    val getTransaction: suspend (String) -> Transaction?,
+    val onTransactionScanned: (Transaction?) -> Unit
 ) : Screen {
-    val modifier = modifier;
-    val onQrCodeScanned = onQrCodeScanned;
 
     @Composable
     override fun Content() {
+        val nav = LocalNavigator.currentOrThrow
         val localDensity = LocalDensity.current
         val localConfig = LocalConfiguration.current
         val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
         var foundTarget by remember { mutableStateOf(false) }
         var target by remember { mutableStateOf(Rect.Zero) }
         val rect by animateRectAsState(
@@ -98,11 +97,17 @@ actual class QRScannerScreen actual constructor(
         if (hasPerm) {
             QRCodeComposable {
                 it.rawValue?.let { qrCode ->
-                    foundTarget = true
-                    onQrCodeScanned(qrCode)
-                }
-                it.boundingBox?.let { box ->
-                    target = box.toComposeRect().inflate(8f)
+                    if (isValid(qrCode)) {
+                        foundTarget = true
+                        it.boundingBox?.let { box ->
+                            target = box.toComposeRect().inflate(8f)
+                        }
+
+                        coroutineScope.launch {
+//                            delay(1000)
+                            onTransactionScanned(getTransaction(qrCode.substring(8)))
+                        }
+                    }
                 }
             }
 
@@ -115,7 +120,7 @@ actual class QRScannerScreen actual constructor(
                         addRoundRect(RoundRect(rect.deflate(8f), CornerRadius(30f)))
                     }
                     clipPath(circlePath, clipOp = ClipOp.Difference) {
-                        drawRect(SolidColor(Color.Black.copy(alpha = 0.6f)))
+                        drawRect(SolidColor(Color.White.copy(alpha = 0.2f)))
                     }
                 }
 
@@ -133,7 +138,7 @@ actual class QRScannerScreen actual constructor(
                 }
             }
         } else {
-//            LocalNavigator.current?.pop();
+            LocalNavigator.currentOrThrow.pop();
         }
     }
 }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "926613432043",
+    "project_id": "fastpay-120f2",
+    "storage_bucket": "fastpay-120f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926613432043:android:2bd500cda45614334500ae",
+        "android_client_info": {
+          "package_name": "garden.potato"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926613432043-drkob0pbmju1psv1k382kc74krddnrh9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "garden.potato",
+            "certificate_hash": "71a3045f4ae2d53b9796d537df9419e2bd2704ca"
+          }
+        },
+        {
+          "client_id": "926613432043-prjpa6l35mjurjvd0cfc50idu71um1a6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTsy00Qiih8pAhS6l_mBEMu8mopdfvIY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926613432043-prjpa6l35mjurjvd0cfc50idu71um1a6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

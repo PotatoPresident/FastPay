@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.googleServices)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -38,6 +40,7 @@ kotlin {
             implementation(libs.camerax.view)
             implementation(libs.camerax.extensions)
             implementation(libs.camerax.mlkit)
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -48,12 +51,23 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
             implementation(compose.materialIconsExtended)
+            implementation(libs.koin.core)
+            implementation(libs.serialization)
 
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.bottomSheetNavigator)
             implementation(libs.voyager.tabNavigator)
             implementation(libs.voyager.transitions)
+            implementation(libs.voyager.koin)
+
+            implementation(libs.firebase.firestore)
+            implementation(libs.kmpauth.google)
+            implementation(libs.kmpauth.firebase)
+            implementation(libs.kmpauth.ui)
+
+            implementation(libs.kamel)
+            implementation(libs.qrose)
         }
     }
 }

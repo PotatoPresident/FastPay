@@ -54,9 +54,9 @@ class PayScreen : Screen {
         val nav = LocalNavigator.currentOrThrow
 
         FilledTonalButton(onClick = {
-            nav.push(QRScannerScreen(modifier = Modifier) {
-
-            })
+//            nav.push(QRScannerScreen() {
+//
+//            })
         }) {
             Text("Scan")
         }
