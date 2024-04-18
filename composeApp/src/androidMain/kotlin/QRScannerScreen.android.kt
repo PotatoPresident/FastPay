@@ -45,8 +45,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 
 actual class QRScannerScreen actual constructor(
@@ -104,8 +106,12 @@ actual class QRScannerScreen actual constructor(
                         }
 
                         coroutineScope.launch {
-//                            delay(1000)
-                            onTransactionScanned(getTransaction(qrCode.substring(8)))
+                            val transaction = withContext(coroutineScope.coroutineContext) {
+                                launch { delay(1000) }
+                                getTransaction(qrCode.substring(8))
+                            }
+
+                            onTransactionScanned(transaction)
                         }
                     }
                 }

@@ -100,7 +100,6 @@ data class RequestScreen(val account: Account, val db: FirebaseFirestore) : Scre
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                 }),
-                isError = label.isBlank(),
                 singleLine = true
             )
             Spacer(modifier = Modifier.size(50.dp))
@@ -123,10 +122,11 @@ data class RequestScreen(val account: Account, val db: FirebaseFirestore) : Scre
 
     private suspend fun submitTransactionRequest(amount: Double, label: String): Transaction {
         val transaction = Transaction(
-            from = account.id,
+            to = account.id,
             amount = amount,
             note = label,
             photoUrl = account.photoUrl,
+            name = account.name,
         )
         val new = db.collection("transactions").add(transaction)
         return new.get().data(Transaction.serializer()).copy(id = new.id)

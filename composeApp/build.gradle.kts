@@ -53,6 +53,7 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.koin.core)
             implementation(libs.serialization)
+            implementation(libs.kotlinx.datetime)
 
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)

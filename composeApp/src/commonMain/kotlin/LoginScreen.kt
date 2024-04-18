@@ -1,9 +1,13 @@
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,24 +47,38 @@ class LoginScreen : Screen {
 
             MaterialTheme {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Spacer(modifier = Modifier.height(80.dp))
 
+                    Text(
+                        text = "Login",
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
                     //Google Sign-In Button and authentication with Firebase
-                    GoogleButtonUiContainerFirebase(onResult = onFirebaseResult) {
+                    GoogleButtonUiContainerFirebase(
+                        onResult = onFirebaseResult,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
                         GoogleSignInButton(
-                            modifier = Modifier.fillMaxWidth().height(44.dp),
+                            modifier = Modifier.width(300.dp).height(44.dp)
+                                .align(Alignment.CenterHorizontally),
                             fontSize = 19.sp
                         ) { this.onClick() }
                     }
 
                     //Apple Sign-In Button and authentication with Firebase
-                    AppleButtonUiContainer(onResult = onFirebaseResult) {
+                    AppleButtonUiContainer(
+                        onResult = onFirebaseResult,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
                         AppleSignInButton(
-                            modifier = Modifier.fillMaxWidth().height(44.dp)
+                            modifier = Modifier.width(300.dp).height(44.dp)
+                                .align(Alignment.CenterHorizontally),
                         ) { this.onClick() }
                     }
-
                 }
             }
         }
